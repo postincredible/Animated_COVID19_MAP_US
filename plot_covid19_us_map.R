@@ -8,21 +8,16 @@ library(tibble)
 library(dplyr)
 library(magick)
 
+# Read files from source 02-02-2020 to 03-03-2020
 d0 <- c(paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/02-0", 2:9,'-2020.csv'), 
         paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/02-", 10:29,'-2020.csv'), 
         paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-0", 1:3,'-2020.csv'))
 
-#t1<-read_csv(url(tail(d0,1)))
-#t2=t1[which(t1$`Country/Region`=='US'),]
-#t2=t2 %>% separate(`Province/State`,c('City','abbr'), sep=', ')
-#t2= t2 %>% drop_na()
-#t3=t2 %>% group_by(abbr) %>% summarise(sum_conf=sum(Confirmed))
-
-#mydata<-read_csv(url(d0[1]))
-#l0=tail(unlist(strsplit(d0[1],'/')),n=1)
-
+# Set single image size and resolution 
 #img0 <- image_graph(600, 450, res = 96)
 img0 <- image_graph(1366, 768, res = 192)
+
+# Get animation map
 out0 <- lapply(d0, function(date){
   
   mydata<-read_csv(url(date))
@@ -40,16 +35,6 @@ out0 <- lapply(d0, function(date){
   usb= usb %>% drop_na()
   usb= usb %>% add_column(date=repdate)
   
-  #  p0=plot_usmap(data = usb, values = "sum_conf", color = "red", labels = F) + 
-  #    scale_fill_continuous(
-  #      low = "cornsilk", high = "red1", name = "Confirmed (nCov19)", na.value = "white", breaks=c(0,2,6,10,20)
-  #    ) + theme(legend.position = "right") + ggtitle(usb$date)
-  
-  # p0=plot_usmap(data = usb, values = "sum_conf", color = "red", labels = F) + 
-  #    scale_fill_continuous(
-  #      low = "cornsilk", high = "red1", name = "Confirmed (nCov19)", na.value = "white", limits= c(0,30)
-  #    ) + theme(legend.position = "right") + ggtitle(usb$date) + theme(plot.title = element_text(hjust=0.5,size=20))
-  
   p0=plot_usmap(data = usb, values = "sum_conf", color = "red", labels = F) + 
     scale_fill_continuous(
       low = "cornsilk", high = "red1", name = "Confirmed (nCov19)", na.value = "white", limits= c(0,30)
@@ -66,4 +51,4 @@ animation <- image_animate(img0, fps = 2)
 
 getwd()
 
-image_write(animation, "gapminder.gif")
+image_write(animation, "covid-19us.gif")
