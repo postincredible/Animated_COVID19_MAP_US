@@ -43,7 +43,7 @@ d0 <- c(paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master
 #}
 ###
 
-date=d0[1]
+
 # Set single image size and resolution 
 #img0 <- image_graph(600, 450, res = 96)
 img0 <- image_graph(1366, 768, res = 192)
