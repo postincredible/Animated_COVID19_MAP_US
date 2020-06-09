@@ -151,3 +151,5 @@ animation <- image_animate(img0, fps = 2)
 getwd()
 
 image_write(animation, "covid-19us.gif")
+
+
