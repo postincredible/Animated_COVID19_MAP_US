@@ -15,16 +15,11 @@ library(magick)
 library(tidyverse)
 
 # Read files from source 02-02-2020 to 06-08-2020
-d0 <- c(paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/02-0", 2:9,'-2020.csv'), 
-        paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/02-", 10:29,'-2020.csv'), 
-        paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-0", 1:9,'-2020.csv'),
-        paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-", 10:31,'-2020.csv'),
-        paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/04-0", 1:9,'-2020.csv'),
-        paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/04-", 10:30,'-2020.csv'),
-        paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/05-0", 1:9,'-2020.csv'),
-        paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/05-", 10:31,'-2020.csv'),
-        paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/06-0", 1:8,'-2020.csv')
-)
+start_date <- '2020-02-02'
+end_date <- '2020-06-08'
+
+d0 <- paste0('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/', format(seq(as.Date(start_date), as.Date(end_date), by = '1 days'), '%m-%d-%Y'),  '.csv')
+
 
 ### Uncomment following code to check the variable used for selecting country and states
 #for (i in 1:length(d0)) {
