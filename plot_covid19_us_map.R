@@ -43,7 +43,7 @@ d0 <- c(paste0("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master
 #}
 ###
 
-
+date=d0[1]
 # Set single image size and resolution 
 #img0 <- image_graph(600, 450, res = 96)
 img0 <- image_graph(1366, 768, res = 192)
@@ -61,11 +61,11 @@ out0 <- lapply(d0, function(date){
   ## variable name for getting country and state
   country_filter <- ifelse(sum(names(world_covid) %>% str_detect('Country/Region')) == 1,'Country/Region', 
                            ifelse(sum(names(world_covid) %>% str_detect('Country_Region')) == 1, 'Country_Region')
-                           )
+  )
   
   state_filter <- ifelse(sum(names(world_covid) %>% str_detect('Province/State')) == 1,'Province/State', 
-                           ifelse(sum(names(world_covid) %>% str_detect('Province_State')) == 1, 'Province_State')
-                           )
+                         ifelse(sum(names(world_covid) %>% str_detect('Province_State')) == 1, 'Province_State')
+  )
   
   ## plot data on date <= '03-09-2020'
   if (repdate <= '03-09-2020') {
@@ -85,7 +85,7 @@ out0 <- lapply(d0, function(date){
     
     usa_covid_sum <- left_join(usa_covid_sum, statepop, by = c('state' = 'abbr'), copy = FALSE) %>% 
       add_column(date=repdate)
-
+    
     
     p0=plot_usmap(data = usa_covid_sum, values = "sum_conf", color = "red", labels = F) + 
       scale_fill_continuous(
@@ -102,8 +102,8 @@ out0 <- lapply(d0, function(date){
     
   } # end plot data on date <= '03-09-2020'
   
- 
-
+  
+  
   
   ## plot data on date >= '03-10-2020'
   if (repdate >= '03-10-2020') {
@@ -121,15 +121,15 @@ out0 <- lapply(d0, function(date){
       group_by(UQ(rlang::sym(state_filter))) %>% 
       summarise(sum_conf=sum(Confirmed))
     
-
+    
     usa_covid_sum <- left_join(usa_covid_sum, statepop, by = structure(names = state_filter, .Data = 'full'), copy = FALSE) %>% 
       add_column(date=repdate)
     
-
+    
     
     p0=plot_usmap(data = usa_covid_sum, values = "sum_conf", color = "red", labels = F) + 
       scale_fill_continuous(
-        low = "cornsilk", high = "red1", name = "Confirmed (nCov19)", na.value = "white", limits= c(0,30)
+        low = "cornsilk", high = "red1", name = "Confirmed\n (nCov19)", na.value = "white", limits= c(0,400000)
       ) + 
       theme(legend.position = c(0.9,.11), legend.direction = 'vertical') + 
       labs(caption = usa_covid_sum$date)  + 
@@ -151,5 +151,4 @@ animation <- image_animate(img0, fps = 2)
 getwd()
 
 image_write(animation, "covid-19us.gif")
-
 
