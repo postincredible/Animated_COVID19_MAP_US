@@ -1,9 +1,11 @@
-<pre>:
+
 # Animated_COVID19_MAP_US
 Generate an animated COVID-19 confirmed case MAP in US using R
 
+
 ### Update
 
+<pre>
 07-26-2020
 
 Add R shiny application with animated COVID-19 map for US. (see app.R)
