@@ -7,4 +7,10 @@ Update
 
 Add R shiny application with animated COVID-19 map for US. (see app.R)
 
+
+
+
+
+
+
 Data source: 2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns Hopkins CSSE
