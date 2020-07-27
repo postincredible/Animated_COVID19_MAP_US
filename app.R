@@ -14,6 +14,7 @@ library(usmap)
 library(ggplot2)
 library(magick)
 library(tidyverse)
+library(shinycssloaders)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
