@@ -1,3 +1,5 @@
+
+
 ###############################################
 ##                                           ##
 ##      R code for animated mapping the      ##
@@ -15,11 +17,15 @@ library(magick)
 library(tidyverse)
 
 # Read files from source 02-02-2020 to 06-08-2020
-start_date <- '2020-02-02'
-end_date <- '2020-06-08'
+start_date <- '2020-07-23'
+end_date <- '2020-07-25'
 
 d0 <- paste0('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/', format(seq(as.Date(start_date), as.Date(end_date), by = '1 days'), '%m-%d-%Y'),  '.csv')
 
+world_covid <- read_csv(url(d0[2])) %>% filter(Country_Region == 'US') 
+
+world_covid %>% count(Province_State)
+world_covid <- read_csv(url(d0[2]))
 
 ### Uncomment following code to check the variable used for selecting country and states
 #for (i in 1:length(d0)) {
@@ -38,6 +44,10 @@ d0 <- paste0('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/c
 #}
 ###
 
+roundUp <- function(x,to=10)
+{
+  to*(x%/%to + as.logical(x%%to))
+}
 
 # Set single image size and resolution 
 #img0 <- image_graph(600, 450, res = 96)
@@ -62,6 +72,9 @@ out0 <- lapply(d0, function(date){
                          ifelse(sum(names(world_covid) %>% str_detect('Province_State')) == 1, 'Province_State')
   )
   
+
+  
+  
   ## plot data on date <= '03-09-2020'
   if (repdate <= '03-09-2020') {
     # get the covid case in usa on the date
@@ -81,10 +94,15 @@ out0 <- lapply(d0, function(date){
     usa_covid_sum <- left_join(usa_covid_sum, statepop, by = c('state' = 'abbr'), copy = FALSE) %>% 
       add_column(date=repdate)
     
+    max_cfm <- max(usa_covid_sum$sum_conf)
+    cfm_digits <- floor(log10(max(usa_covid_sum$sum_conf))) 
+    maxcom <- roundUp(x= max_cfm, to=10^cfm_digits)
+    
+    
     
     p0=plot_usmap(data = usa_covid_sum, values = "sum_conf", color = "red", labels = F) + 
       scale_fill_continuous(
-        low = "cornsilk", high = "red1", name = "Confirmed (nCov19)", na.value = "white", limits= c(0,30)
+        low = "cornsilk", high = "red1", name = "Confirmed (nCov19)", na.value = "white", limits= c(0,maxcom)
       ) + 
       theme(legend.position = c(0.9,.11), legend.direction = 'vertical') + 
       labs(caption = usa_covid_sum$date)  + 
@@ -117,14 +135,18 @@ out0 <- lapply(d0, function(date){
       summarise(sum_conf=sum(Confirmed))
     
     
+
     usa_covid_sum <- left_join(usa_covid_sum, statepop, by = structure(names = state_filter, .Data = 'full'), copy = FALSE) %>% 
       add_column(date=repdate)
     
+    max_cfm <- max(usa_covid_sum$sum_conf)
+    cfm_digits <- floor(log10(max(usa_covid_sum$sum_conf))) 
+    maxcom <- roundUp(x= max_cfm, to=10^cfm_digits)
     
     
     p0=plot_usmap(data = usa_covid_sum, values = "sum_conf", color = "red", labels = F) + 
       scale_fill_continuous(
-        low = "cornsilk", high = "red1", name = "Confirmed\n (nCov19)", na.value = "white", limits= c(0,400000)
+        low = "cornsilk", high = "red1", name = "Confirmed\n (nCov19)", na.value = "white", limits= c(0,maxcom)
       ) + 
       theme(legend.position = c(0.9,.11), legend.direction = 'vertical') + 
       labs(caption = usa_covid_sum$date)  + 
@@ -146,4 +168,5 @@ animation <- image_animate(img0, fps = 2)
 getwd()
 
 image_write(animation, "covid-19us.gif")
+
 
